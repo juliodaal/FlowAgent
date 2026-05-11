@@ -1,0 +1,28 @@
+# Gitleaks configuration — https://github.com/gitleaks/gitleaks
+# Extends the upstream default ruleset and adds allowlists for known-safe
+# placeholders that live in this repository.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Allowed placeholders in templates and docs"
+
+# Paths that are templates / docs only — they must never contain real values,
+# but they will contain placeholder strings that match upstream patterns.
+paths = [
+    '''(^|/)\.env\.example$''',
+    '''(^|/)README\.md$''',
+    '''(^|/)SECURITY\.md$''',
+    '''(^|/)docs/''',
+]
+
+# Substrings that mark a value as an obvious placeholder.
+regexes = [
+    '''your-[a-z0-9-]+-here''',
+    '''replace-with-[a-z0-9-]+''',
+    '''your-project-ref''',
+    '''your-16-char-app-password''',
+    '''your-target-database-id''',
+    '''your-email@gmail\.com''',
+]

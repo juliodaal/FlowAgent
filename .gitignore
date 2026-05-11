@@ -1,0 +1,80 @@
+# --- Environment & secrets ---------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+credentials.json
+service-account*.json
+
+# --- Python ------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.python-version
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.tox/
+.nox/
+.hypothesis/
+pip-wheel-metadata/
+
+# --- Node / Next.js ----------------------------------------------------------
+node_modules/
+.next/
+out/
+.turbo/
+*.tsbuildinfo
+next-env.d.ts
+.pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Docker / runtime data ---------------------------------------------------
+n8n/data/
+n8n_data/
+supabase/data/
+postgres_data/
+volumes/
+
+# --- IDE / editors -----------------------------------------------------------
+.idea/
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.recommended.json
+*.swp
+*.swo
+*~
+
+# --- OS ----------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Logs & temp -------------------------------------------------------------
+*.log
+logs/
+tmp/
+.cache/
+
+# --- Claude Code (local harness state, never share) --------------------------
+.claude/settings.local.json
+
+# --- Local-only ad hoc files -------------------------------------------------
+NYXIS_FEEDBACK.md
+notes.local.md
+scratch/
