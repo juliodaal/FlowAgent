@@ -14,8 +14,10 @@ agent: durable conversation + semantic memory in Postgres/pgvector, tool use
 driven by an LLM, and an integration layer with n8n so the agent participates
 in real automations (inbound email, outbound Notion tasks).
 
-> **Status — Phase 0 / 7.** Project scaffolding only. Subsequent phases add
-> the agent, memory, tools, n8n bridge, and the Next.js UI built on
+> **Status — Phase 1 / 7.** Backend agent core landed: LangGraph
+> planner→responder graph, OpenAI client wrapper, Pydantic-Settings config,
+> structured logging, and 35 tests. Subsequent phases add memory, tools, the
+> n8n bridge, and the Next.js UI built on
 > [`nyxis`](https://github.com/juliodaal/nyxis). See [Roadmap](#roadmap).
 
 ---
@@ -68,6 +70,13 @@ git clone https://github.com/juliodaal/FlowAgent.git
 cd FlowAgent
 cp .env.example .env   # fill in real values; .env is git-ignored
 python scripts/verify_env_safety.py
+
+# Backend (Python 3.12 + uv)
+pip install --user uv
+cd backend
+uv sync --extra dev
+uv run pytest                # 35 tests
+uv run flowagent ping        # smoke-test the agent against your OpenAI key
 ```
 
 Install the pre-commit hook so leaked secrets are caught locally:
@@ -80,7 +89,7 @@ pre-commit install
 ## Roadmap
 
 - [x] **Phase 0** — Repo bootstrap, CI, secret scanning, env template
-- [ ] **Phase 1** — Backend core: LangGraph + OpenAI + FastAPI
+- [x] **Phase 1** — Backend core: LangGraph + OpenAI client + prompts + structlog
 - [ ] **Phase 2** — Persistent memory: Supabase + pgvector
 - [ ] **Phase 3** — Tools: web search, email reading, Notion task creation
 - [ ] **Phase 4** — n8n integration: Gmail trigger and Notion writer workflows

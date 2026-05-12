@@ -1,0 +1,138 @@
+[project]
+name = "flowagent"
+version = "0.1.0"
+description = "Autonomous AI agent with persistent memory and custom tools."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = { text = "MIT" }
+authors = [{ name = "Julio César Daal", email = "juliocesar.daal@gmail.com" }]
+keywords = ["langgraph", "agent", "openai", "ai-automation", "fastapi"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    # Agent orchestration
+    "langgraph>=0.3.0,<1.0",
+    "langchain-core>=0.3.0,<1.0",
+    "langchain-openai>=0.2.0,<1.0",
+    # LLM SDK (langchain-openai already depends on this, but we pin it
+    # explicitly so the agent can use the raw client when needed)
+    "openai>=1.50.0,<3.0",
+    # API
+    "fastapi>=0.115.0,<1.0",
+    "uvicorn[standard]>=0.30.0,<1.0",
+    # Config & validation
+    "pydantic>=2.10.0,<3.0",
+    "pydantic-settings>=2.6.0,<3.0",
+    # Observability
+    "structlog>=24.4.0,<26.0",
+    # Resilience
+    "tenacity>=9.0.0,<10.0",
+    # SSE helpers for FastAPI streaming
+    "sse-starlette>=2.1.0,<3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0,<9.0",
+    "pytest-asyncio>=0.24.0,<1.0",
+    "pytest-mock>=3.14.0,<4.0",
+    "pytest-cov>=6.0.0,<8.0",
+    "respx>=0.21.0,<1.0",
+    "ruff>=0.7.0,<1.0",
+    "mypy>=1.13.0,<2.0",
+    "types-requests",
+]
+
+[project.scripts]
+flowagent = "flowagent.cli:main"
+
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/flowagent"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/flowagent", "README.md", "LICENSE"]
+
+# -----------------------------------------------------------------------------
+# Tooling
+# -----------------------------------------------------------------------------
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E", "F", "W",      # pycodestyle / pyflakes
+    "I",                # isort
+    "B",                # bugbear
+    "UP",               # pyupgrade
+    "SIM",              # simplify
+    "RUF",              # ruff-specific
+    "C4",               # comprehensions
+    "PT",               # pytest style
+    "ASYNC",            # async best practices
+    "S",                # bandit-lite (security)
+]
+ignore = [
+    "S101",             # Allow `assert` (used heavily in tests)
+    "E501",             # Line length handled by formatter
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S105", "S106"]   # Hardcoded test passwords are fine
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+disallow_untyped_decorators = false
+plugins = ["pydantic.mypy"]
+mypy_path = "src"
+namespace_packages = true
+explicit_package_bases = true
+
+[[tool.mypy.overrides]]
+module = ["langgraph.*", "langchain_openai.*", "langchain_core.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--cov=flowagent",
+    "--cov-report=term-missing",
+    "--cov-report=xml",
+]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+markers = [
+    "integration: tests that hit external services (skipped unless explicitly run)",
+]
+
+[tool.coverage.run]
+source = ["flowagent"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+]
