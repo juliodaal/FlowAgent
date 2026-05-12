@@ -10,7 +10,7 @@ from flowagent.config import Settings, get_settings
 
 def test_settings_loads_from_env() -> None:
     settings = Settings()  # type: ignore[call-arg]
-    assert settings.openai_api_key.get_secret_value() == "sk-test-1234567890abcdef"
+    assert settings.openai_api_key.get_secret_value() == "test-only-fake-openai-key-do-not-use"
     assert settings.openai_model == "gpt-test"
     assert settings.log_level == "DEBUG"
 

@@ -15,6 +15,9 @@ paths = [
     '''(^|/)README\.md$''',
     '''(^|/)SECURITY\.md$''',
     '''(^|/)docs/''',
+    # Test fixtures and conftest carry deliberately fake credentials so the
+    # config layer (which rejects real-looking placeholders) can be exercised.
+    '''(^|/)tests/''',
 ]
 
 # Substrings that mark a value as an obvious placeholder.

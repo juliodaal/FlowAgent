@@ -19,7 +19,7 @@ from flowagent.llm.openai_client import OpenAIClient
 @pytest.fixture(autouse=True)
 def _isolated_env(monkeypatch: pytest.MonkeyPatch) -> None:
     """Provide deterministic env vars for the duration of each test."""
-    monkeypatch.setenv("OPENAI_API_KEY", "sk-test-1234567890abcdef")
+    monkeypatch.setenv("OPENAI_API_KEY", "test-only-fake-openai-key-do-not-use")
     monkeypatch.setenv("OPENAI_MODEL", "gpt-test")
     monkeypatch.setenv("LOG_LEVEL", "DEBUG")
     monkeypatch.setenv("LOG_JSON", "false")
